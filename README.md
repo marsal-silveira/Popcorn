@@ -1,2 +1,2 @@
 # Popcorn
-App to get upcoming videos using the The Movie Database (TMDb) as reference.
+App to get upcoming movies using `The Movie Database (TMDb)` as reference.
