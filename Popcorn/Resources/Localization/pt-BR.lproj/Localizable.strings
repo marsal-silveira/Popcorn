@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  Popcorn
+
+  Created by Marsal Silveira on 20/03/18.
+  Copyright © 2018 Marsal Silveira. All rights reserved.
+*/
+
+// Brazil - Portuguese [pt-BR]
+
+// Error
+"error.default" = "Oops... algo deu errado";
+"error.network" = "Não foi possível conectar com a rede. Por favor tente novamente";
+"error.timeout" = "Tempo de resposta excedido. Por favor tente novamente";
+"error.parsing.json" = "Não foi possível extrair os dados";
+
+// Default
+"default.try.again" = "Tentar Novamente";
+"default.ok" = "OK";
+"default.cancel" = "Cancelar";
+"default.yes" = "Sim";
+"default.confirm" = "Confirmar";
+"default.no" = "Não";
+"default.close" = "Fechar";
+
+// Placeholder
+"placeholder.loading" = "Carregando...";
