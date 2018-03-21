@@ -81,4 +81,3 @@ extension LoadingView: Placeholder {
         }
     }
 }
-
