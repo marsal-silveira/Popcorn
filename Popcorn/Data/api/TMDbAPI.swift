@@ -10,7 +10,6 @@ import Foundation
 import Moya
 import RxSwift
 import ObjectMapper
-import Moya_ObjectMapper
 
 protocol TMDbAPIProtocol {
     func upcomingMovies(page: Int) -> Single<MovieObjAPI>

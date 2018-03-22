@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 enum ContentScreen {
     case home
@@ -23,6 +24,7 @@ class ContainerRouter: BaseRouter {
     private let _presenter: ContainerPresenterProtocol
     private var _childRouter: BaseRouter?
     
+    private let _disposeBag = DisposeBag()
     private var _currentScreen: ContentScreen?
     
     override init() {
@@ -54,6 +56,22 @@ extension ContainerRouter: ContainerRouterProtocol {
             let viewController = UIViewController()
             viewController.view.backgroundColor = UIColor.blue
             _viewController.setCurrentViewController(viewController)
+            
+            TMDbAPI()
+                .upcomingMovies(page: 1)
+                .subscribe {[weak self] (event) in
+                    guard let strongSelf = self else { return }
+                    
+                    switch event {
+                    case .success(let movieObjAPI):
+//                        strongSelf.requestResponseVariable.value = .success(())
+                        print("result -> \(movieObjAPI)")
+                    case .error(let error):
+                        print("error -> \(error)")
+//                        strongSelf.requestResponseVariable.value = .failure(APIError.error(description: error.localizedDescription))
+                    }
+                }
+                .disposed(by: _disposeBag)
             
 //            let topCoinsRouter = TopCoinsRouter()
 //            _viewController.setCurrentViewController(topCoinsRouter.viewController)

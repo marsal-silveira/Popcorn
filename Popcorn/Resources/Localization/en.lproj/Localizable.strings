@@ -6,12 +6,12 @@
   Copyright © 2018 Marsal Silveira. All rights reserved.
 */
 
-// English
+// English - Base
 
 // Error
 "error.default" = "Oops... something went wrong";
 "error.network" = "Could not connect with network, please try again";
-"error.timeout" = "Tempo de resposta excedido. Por favor tente novamente";
+"error.timeout" = "The operation couldn't be completed dua to a timeout";
 "error.parsing.json" = "Could not parse data...";
 
 // Default

@@ -1,0 +1,88 @@
+//
+//  ClientUtils.swift
+//  Popcorn
+//
+//  Created by Marsal Silveira on 21/03/18.
+//  Copyright © 2018 Marsal Silveira. All rights reserved.
+//
+
+import Foundation
+import Moya
+import Result
+import RxSwift
+import ObjectMapper
+
+enum ClientUtils {
+    
+    private enum RxSwiftErrorCode {
+        static let timeout: Int = 6
+    }
+    
+    static func translateError(_ error: Swift.Error) -> Swift.Error {
+        
+        let extractedError = translateMoyaError(error)
+        if extractedError.code == NSURLErrorNotConnectedToInternet || extractedError.code == NSURLErrorNetworkConnectionLost {
+            return PopcornError.network
+        }
+        if extractedError.code == NSURLErrorTimedOut || extractedError.code == RxSwiftErrorCode.timeout {
+            return PopcornError.timeout
+        }
+        return error
+    }
+    
+    private static func translateMoyaError(_ error: Swift.Error) -> NSError {
+        
+        if let moyaError = error as? Moya.MoyaError {
+            switch moyaError {
+            case .underlying(let error, _):
+                return error as NSError
+            default:
+                return moyaError as NSError
+            }
+        } else {
+            return error as NSError
+        }
+    }
+}
+
+extension Data {
+    
+    var asJSON: Result<[String: Any], NSError> {
+        do {
+            guard let JSONDict = try JSONSerialization.jsonObject(with: self, options: []) as? [String: Any] else {
+                return Result.failure(PopcornError.parsingJSON as NSError)
+            }
+            return Result.success(JSONDict)
+        } catch let error as NSError {
+            return Result.failure(error)
+        }
+    }
+}
+
+extension PrimitiveSequence where TraitType == SingleTrait, ElementType == Response {
+    
+    func processResponse() -> Single<Moya.Response> {
+        
+        return flatMap({ response -> Single<Moya.Response> in
+            
+            // process response code
+            switch response.statusCode {
+            case 200..<299:
+                return Single.just(response)
+            default:
+                
+                switch response.data.asJSON {
+                case .success(let JSONDict):
+                    if let errorObjAPI = Mapper<ErrorObjAPI>().map(JSON: JSONDict) {
+                        return Single.error(PopcornError.error(description: errorObjAPI.localizedDescription))
+                    } else {
+                        //                                return Single.error(PopcornError.error(description: Strings.errorParsingJson()))
+                        return Single.error(PopcornError.error(description: Strings.errorDefault()))
+                    }
+                case .failure(let error):
+                    return Single.error(error)
+                }
+            }
+        })
+    }
+}

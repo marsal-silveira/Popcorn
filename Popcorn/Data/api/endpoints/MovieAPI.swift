@@ -9,47 +9,38 @@
 import Foundation
 import Moya
 import RxSwift
+import ObjectMapper
+import Moya_ObjectMapper
 
 extension TMDbAPI {
-    
+
     enum Movies: TMDbTarget {
         case upcoming(page: Int)
-        
-        // TargetType
+
         var path: String {
             switch self {
             case .upcoming(let page):
                 return "/movie/upcoming?api_key=\(TMDbAPI.apiKey)&page=\(page)"
             }
         }
-        
-        var method: Moya.Method {
-            switch self {
-            default:
-                return .get
-            }
-        }
-        
-        // Endpoints
+
         static func getUpcoming(page: Int) -> Single<MovieObjAPI> {
-            
-            return ClientAPI<TMDbAPI.Movies>().provider.rx
-                .request(.upcoming(page: page))
+            return self.provider.rx
+                .request(Movies.upcoming(page: page))
                 .timeout(TMDbAPI.Timeout.short, scheduler: MainScheduler.instance)
-                .flatMap({ (response) -> Single<Moya.Response> in
-                    
-                    // process response code
-                    switch response.statusCode {
-                    case 200..<299:
-                        return Single.just(response)
-                            //                case 401:
-                        //                    return Single.error(PopcornError.Login.invalidCredentials)
-                    default:
-                        return Single.error(PopcornError.error(description: Strings.errorDefault()))
-                    }
-                })
+                .processResponse()
                 .mapObject(MovieObjAPI.self)
-                .catchError({ (error) -> Single<MovieObjAPI> in return Single.error(APIUtil.translateError(error)) })
+                .catchError({ (error) -> Single<MovieObjAPI> in return Single.error(ClientUtils.translateError(error)) })
         }
     }
+}
+
+extension TMDbAPI.Movies {
+
+    // TODO: I don't know why but I can't use a generic `provider` using Generic (e.g. MoyProvider<T>) so I need create a new one for each Target
+    // check if there is a better way to solve this...
+    static var provider = MoyaProvider<TMDbAPI.Movies>(
+        endpointClosure: { (target) -> Endpoint<TMDbAPI.Movies> in return TMDbAPI.Movies.endpoint(target) },
+        plugins: TMDbAPI.Movies.plugins
+    )
 }
