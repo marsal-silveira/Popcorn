@@ -1,5 +1,5 @@
 //
-//  ErrorObjAPI.swift
+//  ErrorResultAPI.swift
 //  Popcorn
 //
 //  Created by Marsal Silveira.
@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 // Store the error message and http status code returned from WebService when occurs error
-class ErrorObjAPI: Mappable {
+class ErrorResultAPI: Mappable {
     
     var status: Int?
     var message: String?

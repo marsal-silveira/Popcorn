@@ -40,18 +40,3 @@ enum PopcornError: PopcornErrorProtocol {
         }
     }
 }
-
-////*************************************************
-//// MARK: - Login
-////*************************************************
-//
-//extension PopcornError {
-//
-//    enum Login: PopcornErrorProtocol {
-//        case invalidCredentials
-//
-//        var errorDescription: String? {
-//            return Strings.loginInvalidCredentials()
-//        }
-//    }
-//}

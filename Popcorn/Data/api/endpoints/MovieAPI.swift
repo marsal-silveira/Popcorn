@@ -24,13 +24,13 @@ extension TMDbAPI {
             }
         }
 
-        static func getUpcoming(page: Int) -> Single<MovieObjAPI> {
+        static func getUpcoming(page: Int) -> Single<UpcomingMoviesResultAPI> {
             return self.provider.rx
                 .request(Movies.upcoming(page: page))
                 .timeout(TMDbAPI.Timeout.short, scheduler: MainScheduler.instance)
                 .processResponse()
-                .mapObject(MovieObjAPI.self)
-                .catchError({ (error) -> Single<MovieObjAPI> in return Single.error(ClientUtils.translateError(error)) })
+                .mapObject(UpcomingMoviesResultAPI.self)
+                .catchError({ (error) -> Single<UpcomingMoviesResultAPI> in return Single.error(ClientUtils.translateError(error)) })
         }
     }
 }

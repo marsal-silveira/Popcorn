@@ -1,5 +1,5 @@
 //
-//  CoinRepository.swift
+//  MovieRepository.swift
 //  Popcorn
 //
 //  Created by Marsal Silveira.
@@ -8,31 +8,49 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
-protocol UserRepositoryProtocol {
-    func upcoming(page: Int) -> Single<Movie>
+protocol MovieRepositoryProtocol {
+
+    var upcomingMovies: Observable<RequestResponse<UpcomingMovies>> { get }
+    func getUpcomingMovies(page: Int)
 }
 
-class UserRepository: BaseRepository {
+class MovieRepository: BaseRepository {
 
     fileprivate let _TMDbAPI: TMDbAPIProtocol
+    fileprivate var _upcomingMovies = BehaviorRelay<RequestResponse<UpcomingMovies>>(value: .new)
+    
+    fileprivate var _disposeBag = DisposeBag()
 
     init(tMDbAPI: TMDbAPIProtocol) {
         _TMDbAPI = tMDbAPI
     }
 }
 
-extension UserRepository: UserRepositoryProtocol {
+extension MovieRepository: MovieRepositoryProtocol {
+    
+    var upcomingMovies: Observable<RequestResponse<UpcomingMovies>> {
+        return _upcomingMovies.asObservable()
+    }
 
-    func upcoming(page: Int) -> Single<Movie> {
-
-        return _TMDbAPI.upcomingMovies(page: page)
-            .flatMap({ (movieObjAPI) -> Single<Movie> in
-
-                guard let movie = Movie.map(movieObjAPI: movieObjAPI) else {
-                    return Single.error(PopcornError.error(description: "TODO:"))
+    func getUpcomingMovies(page: Int) {
+        
+        _upcomingMovies.accept(.loading)
+        
+        _TMDbAPI.upcomingMovies(page: page)
+            .subscribe { [weak self] (event) in
+                guard let strongSelf = self else { return }
+                
+                switch event {
+                case .success(let upcomingMoviesResult):
+                    guard let upcomingMovies = UpcomingMovies.map(upcomingMoviesResult: upcomingMoviesResult) else { fatalError() }
+                    strongSelf._upcomingMovies.accept(.success(upcomingMovies))
+                    
+                case .error(let error):
+                    strongSelf._upcomingMovies.accept(.failure(error))
                 }
-                return Single.just(movie)
-            })
+            }
+            .disposed(by: _disposeBag)
     }
 }

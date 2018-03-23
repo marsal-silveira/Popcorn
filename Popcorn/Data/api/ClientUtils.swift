@@ -73,12 +73,8 @@ extension PrimitiveSequence where TraitType == SingleTrait, ElementType == Respo
                 
                 switch response.data.asJSON {
                 case .success(let JSONDict):
-                    if let errorObjAPI = Mapper<ErrorObjAPI>().map(JSON: JSONDict) {
-                        return Single.error(PopcornError.error(description: errorObjAPI.localizedDescription))
-                    } else {
-                        //                                return Single.error(PopcornError.error(description: Strings.errorParsingJson()))
-                        return Single.error(PopcornError.error(description: Strings.errorDefault()))
-                    }
+                    let errorDescription = Mapper<ErrorResultAPI>().map(JSON: JSONDict)?.localizedDescription ?? Strings.errorParsingJson()
+                    return Single.error(PopcornError.error(description: errorDescription))
                 case .failure(let error):
                     return Single.error(error)
                 }

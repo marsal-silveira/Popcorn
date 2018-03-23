@@ -20,6 +20,7 @@ class BaseViewController: UIViewController {
     // private
     private var _placeholder: Placeholder?
     private let _disposeBag = DisposeBag()
+    private var _backgroundImageView: UIImageView?
     
     // internal
     internal let basePresenter: BasePresenterProtocol
@@ -36,11 +37,25 @@ class BaseViewController: UIViewController {
     convenience required init?(coder aDecoder: NSCoder) {
         self.init(coder: aDecoder)
     }
+    
+    override func loadView() {
+        super.loadView()
+
+        view.backgroundColor = .white
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.setupOnLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let navigationController = self.navigationController as? BaseNavigationController {
+            navigationController.style = .transparent
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -56,7 +71,13 @@ class BaseViewController: UIViewController {
     // ************************************************
     
     private func setupOnLoad() {
+        self.removeBackButtonTitle()
+        self.applyLayout()
         self.bind()
+    }
+    
+    internal func applyLayout() {
+        // do nothing... this must be implemented by descendants classes to customize this behavior
     }
     
     internal func bind() {
@@ -80,11 +101,50 @@ class BaseViewController: UIViewController {
     }
     
     // ************************************************
-    // MARK: Placeholders
+    // MARK: Utils
     // ************************************************
+    
+    private func removeBackButtonTitle() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+    }
+}
+
+// ************************************************
+// MARK: BackgroundImage
+// ************************************************
+
+extension BaseViewController {
+
+    internal func addBackgroundImage(_ image: UIImage, withBlurEffect: Bool = false) {
+
+        _backgroundImageView?.removeFromSuperview()
+        _backgroundImageView = UIImageView(image: image)
+        _backgroundImageView?.contentMode = .scaleAspectFill
+        self.view.addSubview(_backgroundImageView!)
+        self.view.sendSubview(toBack: _backgroundImageView!)
+        constrain(self.view, _backgroundImageView!) { (container, image) in
+            image.edges == container.edges
+        }
+
+        if withBlurEffect {
+            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark) //extraLight, light, dark
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView.frame = _backgroundImageView!.bounds
+            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            _backgroundImageView!.addSubview(blurEffectView)
+        }
+    }
+}
+
+// ************************************************
+// MARK: Placeholders
+// ************************************************
+
+extension BaseViewController {
 
     private func presentPlaceholder(type: PlaceholderType) {
         view.endEditing(true)
+        self.enableNavbarIntems(false)
         
         switch type {
         case .loading(let viewModel):
@@ -98,6 +158,7 @@ class BaseViewController: UIViewController {
     private func dismissPlaceholder() {
         _placeholder?.dismiss()
         _placeholder = nil
+        self.enableNavbarIntems(true)
     }
 
     private func showLoading(viewModel: LoadingViewModel) {
@@ -114,5 +175,22 @@ class BaseViewController: UIViewController {
         let errorView = ErrorView(viewModel: viewModel)
         errorView.present(on: self.view)
         _placeholder = errorView
+    }
+}
+
+// ************************************************
+// MARK: NavigationBar
+// ************************************************
+
+extension BaseViewController {
+    
+    private func enableNavbarIntems(_ isEnable: Bool) {
+        if let leftButtons = navigationItem.leftBarButtonItems {
+            leftButtons.forEach { $0.isEnabled = isEnable }
+        }
+        
+        if let rightButtons = navigationItem.rightBarButtonItems {
+            rightButtons.forEach { $0.isEnabled = isEnable }
+        }
     }
 }

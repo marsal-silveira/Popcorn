@@ -53,29 +53,9 @@ extension ContainerRouter: ContainerRouterProtocol {
         switch screen {
 
         case .home:
-            let viewController = UIViewController()
-            viewController.view.backgroundColor = UIColor.blue
-            _viewController.setCurrentViewController(viewController)
-            
-            TMDbAPI()
-                .upcomingMovies(page: 1)
-                .subscribe {[weak self] (event) in
-                    guard let strongSelf = self else { return }
-                    
-                    switch event {
-                    case .success(let movieObjAPI):
-//                        strongSelf.requestResponseVariable.value = .success(())
-                        print("result -> \(movieObjAPI)")
-                    case .error(let error):
-                        print("error -> \(error)")
-//                        strongSelf.requestResponseVariable.value = .failure(APIError.error(description: error.localizedDescription))
-                    }
-                }
-                .disposed(by: _disposeBag)
-            
-//            let topCoinsRouter = TopCoinsRouter()
-//            _viewController.setCurrentViewController(topCoinsRouter.viewController)
-//            _childRouter = topCoinsRouter
+            let upcomingMoviesRouter = UpcomingMoviesRouter()
+            _viewController.setCurrentViewController(upcomingMoviesRouter.viewController)
+            _childRouter = upcomingMoviesRouter            
         }
         
         _currentScreen = screen

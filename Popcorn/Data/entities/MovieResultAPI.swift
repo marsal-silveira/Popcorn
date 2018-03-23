@@ -1,5 +1,5 @@
 //
-//  MovieObjAPI.swift
+//  MovieResultAPI.swift
 //  Popcorn
 //
 //  Created by Marsal Silveira.
@@ -9,15 +9,16 @@
 import Foundation
 import ObjectMapper
 
-class MovieObjAPI: Mappable {
+class MovieResultAPI: Mappable {
     
     private(set) var id: Int64?
     private(set) var title: String?
     private(set) var posterPath: String?
     private(set) var backdropPath: String?
-    private(set) var releaseDate: Date?
+    private(set) var releaseDate: String?
     private(set) var overview: String?
-//    private(set) var genres: [Genre]
+    private(set) var genres: [Int]?
+    private(set) var rating: Double?
     
     required init?(map: Map) {
         mapping(map: map)
@@ -30,5 +31,7 @@ class MovieObjAPI: Mappable {
         backdropPath <- map["backdrop_path"]
         releaseDate <- map["release_date"]
         overview <- map["overview"]
+        genres <- map["genre_ids"]
+        rating <- map["vote_average"]
     }
 }

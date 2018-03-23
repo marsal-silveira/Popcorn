@@ -12,7 +12,7 @@ import RxSwift
 import ObjectMapper
 
 protocol TMDbAPIProtocol {
-    func upcomingMovies(page: Int) -> Single<MovieObjAPI>
+    func upcomingMovies(page: Int) -> Single<UpcomingMoviesResultAPI>
 }
 
 struct TMDbAPI {
@@ -30,7 +30,7 @@ struct TMDbAPI {
 
 extension TMDbAPI: TMDbAPIProtocol {
     
-    func upcomingMovies(page: Int) -> Single<MovieObjAPI> {
+    func upcomingMovies(page: Int) -> Single<UpcomingMoviesResultAPI> {
         return TMDbAPI.Movies.getUpcoming(page: page)
     }
 }

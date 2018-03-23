@@ -25,3 +25,6 @@
 
 // Placeholder
 "placeholder.loading" = "Loading...";
+
+// Upcoming Movies
+"upcoming.movies.title" = "Upcoming";
