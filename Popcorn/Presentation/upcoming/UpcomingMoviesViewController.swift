@@ -33,7 +33,7 @@ class UpcomingMoviesViewController: BaseViewController {
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(UpcomingMoviesViewController.handleRefresh(_:)), for: .valueChanged)
-        refreshControl.tintColor = UIColor.customBlue
+        refreshControl.tintColor = UIColor.white
         refreshControl.alpha = 0.75
 
         return refreshControl

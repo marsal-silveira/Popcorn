@@ -38,12 +38,6 @@ class BaseViewController: UIViewController {
         self.init(coder: aDecoder)
     }
     
-    override func loadView() {
-        super.loadView()
-
-        view.backgroundColor = .white
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 

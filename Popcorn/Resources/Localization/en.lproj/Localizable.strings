@@ -29,3 +29,9 @@
 // Upcoming Movies
 "upcoming.movies.title" = "Upcoming";
 "upcoming.movies.movie.not.found" = "Selected movie not found";
+
+// Movie Details
+"movie.details.title" = "Details";
+"movie.details.rating" = "Rating:";
+"movie.details.release.date" = "Release Date:";
+"movie.details.genre" = "Genre:";

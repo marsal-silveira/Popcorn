@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+// Value Object to be used in view
 struct UpcomingMovieVO {
     
     private(set) var id: Int64
@@ -39,17 +40,15 @@ protocol UpcomingMoviesPresenterProtocol: BasePresenterProtocol {
 
 class UpcomingMoviesPresenter: BasePresenter {
     
+    // internal
     private let _interactor: UpcomingMoviesInteractorProtocol
     private let _disposeBag = DisposeBag()
     
     private var _movies = BehaviorRelay<[Movie]>(value: [])
     private var _showLoading = true
 
-    private weak var _router: UpcomingMoviesRouterProtocol?
-    public var router: UpcomingMoviesRouterProtocol? {
-        get { return _router }
-        set { _router = newValue }
-    }
+    // public
+    public weak var router: UpcomingMoviesRouterProtocol?
     
     init(interactor: UpcomingMoviesInteractorProtocol) {
     
@@ -118,6 +117,6 @@ extension UpcomingMoviesPresenter: UpcomingMoviesPresenterProtocol {
             _viewState.accept(.error(placeholderViewModel))
             return
         }
-        _router?.showDetails(for: selectedMovie)
+        router?.showDetails(for: selectedMovie)
     }
 }

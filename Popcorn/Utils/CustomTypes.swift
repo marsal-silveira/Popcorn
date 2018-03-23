@@ -33,3 +33,4 @@ prefix public func ❗️(a: Bool) -> Bool { return !a }
 
 typealias Strings = R.string.localizable
 typealias Images = R.image
+typealias Nibs = R.nib

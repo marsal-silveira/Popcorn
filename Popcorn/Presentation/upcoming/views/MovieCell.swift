@@ -12,12 +12,12 @@ import Kingfisher
 
 class MovieCell: UICollectionViewCell {
     
+    @IBOutlet fileprivate weak var loadignIndicator: UIActivityIndicatorView!
     @IBOutlet fileprivate weak var containerView: UIView!
     @IBOutlet fileprivate weak var posterImageView: UIImageView!
     @IBOutlet fileprivate weak var titleLabel: UILabel!
     @IBOutlet fileprivate weak var detailsLabel: UILabel!
     @IBOutlet fileprivate weak var ratingLabel: UILabel!
-    @IBOutlet fileprivate weak var loadignIndicator: UIActivityIndicatorView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

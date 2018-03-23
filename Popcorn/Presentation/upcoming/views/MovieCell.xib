@@ -25,7 +25,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hYp-Jh-doW">
                                 <rect key="frame" x="0.0" y="232" width="200" height="100"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Black Circle" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRb-yZ-1rl">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="The Legend of Tarzan" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRb-yZ-1rl">
                                         <rect key="frame" x="16" y="16" width="168" height="20"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -34,13 +34,13 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="20-03-2018" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cw-U8-d8T">
                                         <rect key="frame" x="16" y="44" width="168" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="textColor" cyan="0.23999999999999999" magenta="0.28075408935546875" yellow="0.2506600022315979" black="0.0023309427779167891" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
+                                        <color key="textColor" red="0.74117647058823533" green="0.74117647058823533" blue="0.74117647058823533" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="★ 4.7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EH9-dE-v9g">
                                         <rect key="frame" x="16" y="72" width="28" height="12"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
-                                        <color key="textColor" red="0.73725490196078436" green="0.66666666666666663" blue="0.64313725490196072" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="0.74117647058823533" green="0.74117647058823533" blue="0.74117647058823533" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -64,7 +64,7 @@
                                 <rect key="frame" x="82" y="98" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" red="0.24313725490196078" green="0.15294117647058825" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.27058823529411763" green="0.3529411764705882" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="hYp-Jh-doW" firstAttribute="leading" secondItem="cWW-CI-Ao1" secondAttribute="leading" id="1WC-sh-6g2"/>
                             <constraint firstItem="fZY-sW-Ga1" firstAttribute="centerX" secondItem="izr-eE-ft6" secondAttribute="centerX" id="3eT-vw-P3I"/>
@@ -100,7 +100,7 @@
                 <outlet property="ratingLabel" destination="EH9-dE-v9g" id="WZc-Q6-FMU"/>
                 <outlet property="titleLabel" destination="gRb-yZ-1rl" id="TMM-Rt-9Le"/>
             </connections>
-            <point key="canvasLocation" x="-175" y="25"/>
+            <point key="canvasLocation" x="-430" y="-284"/>
         </collectionViewCell>
     </objects>
     <resources>
