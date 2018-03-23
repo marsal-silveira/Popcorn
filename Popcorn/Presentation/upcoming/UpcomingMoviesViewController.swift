@@ -21,7 +21,7 @@ class UpcomingMoviesViewController: BaseViewController {
         return basePresenter as! UpcomingMoviesPresenterProtocol
     }
 
-    fileprivate var _movies = [Movie]()
+    fileprivate var _movies = [UpcomingMovieVO]()
     
     fileprivate var _disposeBag = DisposeBag()
     
@@ -43,6 +43,7 @@ class UpcomingMoviesViewController: BaseViewController {
         
         // create collection and its layout
         let collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: CollectionViewGridLayout())
+//        collectionView.isPrefetchingEnabled = false
 
         // set delegate and dataSource
         collectionView.dataSource = self
@@ -89,6 +90,7 @@ class UpcomingMoviesViewController: BaseViewController {
         
         self.addBackgroundImage(#imageLiteral(resourceName: "bg_upcoming"))
         self.addCollectionView()
+        _collectionView.reloadData()
         self.loadData(reset: true)
     }
     
@@ -115,14 +117,17 @@ class UpcomingMoviesViewController: BaseViewController {
         _presenter.fetchMovies(reset: reset)
     }
     
-    private func showMovies(_ movies: [Movie]) {
+    private func showMovies(_ movies: [UpcomingMovieVO]) {
+        
         _movies.removeAll()
         _movies.append(contentsOf: movies)
         
-        print("->> count \(_movies.count)")
-        _movies.forEach { (movie) in
-            print("->> [\(movie.id)]\(movie.title)")
-        }
+//        print("->> count \(_movies.count)")
+//        var count = 0
+//        _movies.forEach { (movie) in
+//            count += 1
+//            print("->> [\(count)] [\(movie.id)] \(movie.title)")
+//        }
         
         DispatchQueue.main.async { [weak self] in
             self?._refreshControl.endRefreshing()
@@ -143,12 +148,17 @@ extension UpcomingMoviesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+//        print("section -> \(indexPath.section), row -> \(indexPath.row)")
         let cell = collectionView.dequeueReusableCell(forIndexPath: indexPath) as MovieCell
-        cell.setup(movie: _movies[indexPath.row])
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
         
-        cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        UIView.animate(withDuration: 0.4) {
-            cell.transform = CGAffineTransform.identity
+            cell.setup(movie: strongSelf._movies[indexPath.row])
+            
+            cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            UIView.animate(withDuration: 0.4) {
+                cell.transform = CGAffineTransform.identity
+            }
         }
 
         return cell
@@ -170,16 +180,10 @@ extension UpcomingMoviesViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-//        print("indexPath -> \(indexPath.row)")
-        if indexPath.row == _movies.count-1 {
 
-//            print(">>>>>>>>>>>>>> indexPath -> \(indexPath.row)")
+//        print("row -> \(indexPath.row), count -> \(_movies.count)")
+        if indexPath.row == _movies.count-1 {
             _presenter.fetchMovies(reset: false)
-//            _movies.append(contentsOf: Photo.allPhotos())
-//            DispatchQueue.main.async {
-//                collectionView.reloadData()
-//            }
         }
     }
 }

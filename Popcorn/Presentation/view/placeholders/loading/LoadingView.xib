@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoadingView" customModule="CoinFindr" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoadingView" customModule="Popcorn" customModuleProvider="target">
             <connections>
                 <outlet property="loadingImage" destination="CAR-3V-sgO" id="lCT-83-rCE"/>
                 <outlet property="titleLabel" destination="X3L-dR-MyC" id="7l1-Zu-n2f"/>
@@ -21,7 +21,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading" translatesAutoresizingMaskIntoConstraints="NO" id="CAR-3V-sgO">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_loading" translatesAutoresizingMaskIntoConstraints="NO" id="CAR-3V-sgO">
                     <rect key="frame" x="130" y="239" width="60" height="60"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="CAR-3V-sgO" secondAttribute="height" id="2Vo-0T-oP9"/>
@@ -45,6 +45,6 @@
         </view>
     </objects>
     <resources>
-        <image name="loading" width="75" height="75"/>
+        <image name="img_loading" width="75" height="75"/>
     </resources>
 </document>

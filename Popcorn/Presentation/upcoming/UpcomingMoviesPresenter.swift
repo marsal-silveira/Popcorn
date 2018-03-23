@@ -10,14 +10,31 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+struct UpcomingMovieVO {
+    
+    private(set) var id: Int64
+    private(set) var title: String
+    private(set) var details: String
+    private(set) var posterPath: String?
+    private(set) var rating: String
+    
+    init(id: Int64, title: String, details: String, posterPath: String?, rating: String) {
+        self.id = id
+        self.title = title
+        self.details = details
+        self.posterPath = posterPath
+        self.rating = rating
+    }
+}
+
 protocol UpcomingMoviesPresenterProtocol: BasePresenterProtocol {
 
     var router: UpcomingMoviesRouterProtocol? { get set }
-    var movies: Observable<[Movie]> { get }
+    var movies: Observable<[UpcomingMovieVO]> { get }
     
     func fetchMovies(reset: Bool)
     
-    func didSelectMovie(_ movie: Movie)
+    func didSelectMovie(_ movie: UpcomingMovieVO)
 }
 
 class UpcomingMoviesPresenter: BasePresenter {
@@ -26,6 +43,7 @@ class UpcomingMoviesPresenter: BasePresenter {
     private let _disposeBag = DisposeBag()
     
     private var _movies = BehaviorRelay<[Movie]>(value: [])
+    private var _showLoading = true
 
     private weak var _router: UpcomingMoviesRouterProtocol?
     public var router: UpcomingMoviesRouterProtocol? {
@@ -50,7 +68,9 @@ class UpcomingMoviesPresenter: BasePresenter {
                 switch response {
 
                 case .loading:
-                    strongSelf._viewState.accept(.loading(LoadingViewModel(text: Strings.placeholderLoading())))
+                    if strongSelf._showLoading {
+                        strongSelf._viewState.accept(.loading(LoadingViewModel(text: Strings.placeholderLoading())))
+                    }
 
                 case .success(let movies):
                     strongSelf._viewState.accept(.normal)
@@ -70,15 +90,34 @@ class UpcomingMoviesPresenter: BasePresenter {
 
 extension UpcomingMoviesPresenter: UpcomingMoviesPresenterProtocol {
     
-    var movies: Observable<[Movie]> {
-        return _movies.asObservable()
+    var movies: Observable<[UpcomingMovieVO]> {
+
+        return _movies
+            .asObservable()
+            .flatMap { (movies) -> Observable<[UpcomingMovieVO]> in
+
+                let mm = movies.map { (movie) -> UpcomingMovieVO in
+                    let details = "<genre>, \(movie.releaseDate)"
+                    let posterPath = movie.posterPath != nil ? "http://image.tmdb.org/t/p/w300\(movie.posterPath!)" : nil
+                    let rating = "★ \(movie.rating)"
+                    return UpcomingMovieVO(id: movie.id, title: movie.title, details: details, posterPath: posterPath, rating: rating)
+                }
+                return Observable.just(mm)
+            }
     }
 
     func fetchMovies(reset: Bool = false) {
+        _showLoading = reset
         _interactor.fetchMovies(reset: reset)
     }
     
-    func didSelectMovie(_ movie: Movie) {
-        _router?.showDetails(for: movie)
+    func didSelectMovie(_ movie: UpcomingMovieVO) {
+        
+        guard let selectedMovie = _movies.value.filter({ (m) -> Bool in return m.id == movie.id }).first else {
+            let placeholderViewModel = ErrorViewModel(text: Strings.errorDefault(), details: Strings.upcomingMoviesMovieNotFound())
+            _viewState.accept(.error(placeholderViewModel))
+            return
+        }
+        _router?.showDetails(for: selectedMovie)
     }
 }

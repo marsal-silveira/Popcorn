@@ -29,30 +29,32 @@ class MovieCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        posterImageView.image = #imageLiteral(resourceName: "img_placeholder")
-        loadignIndicator.isHidden = false
-        loadignIndicator.startAnimating()
+        DispatchQueue.main.async { [weak self] in
+            self?.posterImageView.image = #imageLiteral(resourceName: "img_placeholder")
+            self?.loadignIndicator.isHidden = false
+            self?.loadignIndicator.startAnimating()
+        }
     }
     
-    func setup(movie: Movie) {
+    func setup(movie: UpcomingMovieVO) {
 
-        titleLabel.text = movie.title
-        detailsLabel.text = movie.releaseDate
-        ratingLabel.text = "★ \(movie.rating)"
+        self.titleLabel.text = movie.title
+        self.detailsLabel.text = movie.details
+        self.ratingLabel.text = movie.rating
         
         self.downloadPoster(movie: movie)
     }
     
     private func updatePosterImage(_ image: UIImage) {
         
-        loadignIndicator.isHidden = true
-        loadignIndicator.stopAnimating()
-        posterImageView.image = image
+        self.loadignIndicator.stopAnimating()
+        self.loadignIndicator.isHidden = true
+        self.posterImageView.image = image
     }
     
-    private func downloadPoster(movie: Movie) {
+    private func downloadPoster(movie: UpcomingMovieVO) {
         
-        if let picturePath = movie.posterPath, let pictureURL = URL(string: "http://image.tmdb.org/t/p/w300\(picturePath)") {
+        if let picturePath = movie.posterPath, let pictureURL = URL(string: picturePath) {
             
             ImageDownloader.default.downloadImage(with: pictureURL, completionHandler: { [weak self] (image, error, _, _) in
                 self?.updatePosterImage(image ?? #imageLiteral(resourceName: "img_placeholder"))

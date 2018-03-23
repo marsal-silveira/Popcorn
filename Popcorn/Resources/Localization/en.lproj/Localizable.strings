@@ -28,3 +28,4 @@
 
 // Upcoming Movies
 "upcoming.movies.title" = "Upcoming";
+"upcoming.movies.movie.not.found" = "Selected movie not found";

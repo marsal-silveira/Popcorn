@@ -28,3 +28,4 @@
 
 // Upcoming Movies
 "upcoming.movies.title" = "Lançamentos";
+"upcoming.movies.movie.not.found" = "Não foi possível encontrar o filme selecionado";
