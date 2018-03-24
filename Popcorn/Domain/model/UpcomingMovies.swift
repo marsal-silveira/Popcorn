@@ -12,30 +12,28 @@ class UpcomingMovies {
     
     private(set) var page: Int
     private(set) var totalPages: Int
-    private(set) var totalMovies: Int
     private(set) var movies: [Movie]
     
-    init(page: Int, totalPages: Int, totalMovies: Int, movies: [Movie]) {
+    init(page: Int, totalPages: Int, movies: [Movie]) {
         self.page = page
         self.totalPages = totalPages
-        self.totalMovies = totalMovies
         self.movies = movies
     }
 }
 
+// Decoder...
 extension UpcomingMovies {
  
-    static func map(upcomingMoviesResult: UpcomingMoviesResultAPI) -> UpcomingMovies? {
+    static func map(upcomingMoviesResult: UpcomingMoviesResultAPI, genres: [Genre]) -> UpcomingMovies? {
         
         guard let page = upcomingMoviesResult.page,
               let totalPages = upcomingMoviesResult.totalPages,
-              let totalMovies = upcomingMoviesResult.totalMovies,
-              let movies = upcomingMoviesResult.movies else {
+              let moviesResult = upcomingMoviesResult.movies else {
             return nil
         }
-        let mo = movies.map { (movieResult) -> Movie in
-            return Movie.map(movieResult: movieResult)!
+        let movies = moviesResult.map { (movieResult) -> Movie in
+            return Movie.map(movieResult: movieResult, genres: genres)!
         }
-        return UpcomingMovies(page: page, totalPages: totalPages, totalMovies: totalMovies, movies: mo)
+        return UpcomingMovies(page: page, totalPages: totalPages, movies: movies)
     }
 }

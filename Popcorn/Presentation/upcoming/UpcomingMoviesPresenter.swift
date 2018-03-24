@@ -13,17 +13,19 @@ import RxCocoa
 // Value Object to be used in view
 struct UpcomingMovieVO {
     
-    private(set) var id: Int64
-    private(set) var title: String
-    private(set) var details: String
+    private(set) var id: Int
     private(set) var posterPath: String?
+    private(set) var title: String
+    private(set) var genres: String
+    private(set) var releaseDate: String
     private(set) var rating: String
     
-    init(id: Int64, title: String, details: String, posterPath: String?, rating: String) {
+    init(id: Int, posterPath: String?, title: String, genres: String, releaseDate: String, rating: String) {
         self.id = id
-        self.title = title
-        self.details = details
         self.posterPath = posterPath
+        self.title = title
+        self.genres = genres
+        self.releaseDate = releaseDate
         self.rating = rating
     }
 }
@@ -96,10 +98,11 @@ extension UpcomingMoviesPresenter: UpcomingMoviesPresenterProtocol {
             .flatMap { (movies) -> Observable<[UpcomingMovieVO]> in
 
                 let mm = movies.map { (movie) -> UpcomingMovieVO in
-                    let details = "<genre>, \(movie.releaseDate)"
-                    let posterPath = movie.posterPath != nil ? "http://image.tmdb.org/t/p/w300\(movie.posterPath!)" : nil
+                    
+                    // TODO: Check this... call TMDbAPI from here looks like strange :|
+                    let posterPath = movie.posterPath != nil ? "\(TMDbAPI.imageBasePath)/w300\(movie.posterPath!)" : nil
                     let rating = "★ \(movie.rating)"
-                    return UpcomingMovieVO(id: movie.id, title: movie.title, details: details, posterPath: posterPath, rating: rating)
+                    return UpcomingMovieVO(id: movie.id, posterPath: posterPath, title: movie.title, genres: movie.genresStr, releaseDate: movie.releaseDate, rating: rating)
                 }
                 return Observable.just(mm)
             }

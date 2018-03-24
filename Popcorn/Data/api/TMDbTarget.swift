@@ -39,7 +39,7 @@ protocol TMDbTarget: TargetType {
 extension TMDbTarget {
 
     var baseURL: URL {
-        return URL(string: TMDbAPI.basePath)!
+        return URL(string: TMDbAPI.apiBasePath)!
     }
 
     var path: String {

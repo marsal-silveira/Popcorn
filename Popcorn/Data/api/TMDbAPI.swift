@@ -12,7 +12,11 @@ import RxSwift
 import ObjectMapper
 
 protocol TMDbAPIProtocol {
+    // Movies
     func upcomingMovies(page: Int) -> Single<UpcomingMoviesResultAPI>
+    
+    // Genres
+    func genres() -> Single<[GenreResultAPI]>
 }
 
 struct TMDbAPI {
@@ -25,12 +29,25 @@ struct TMDbAPI {
     
     static let apiKey = "1f54bd990f1cdfb230adb312546d765d"
     static let apiVersion: String = "/3"
-    static let basePath: String = "https://api.themoviedb.org" + apiVersion
+    static let apiBasePath: String = "https://api.themoviedb.org" + apiVersion
+    static let imageBasePath: String = "https://image.tmdb.org/t/p"
 }
 
 extension TMDbAPI: TMDbAPIProtocol {
     
+    // ************************************************
+    // MARK: Movies
+    // ************************************************
+    
     func upcomingMovies(page: Int) -> Single<UpcomingMoviesResultAPI> {
         return TMDbAPI.Movies.getUpcoming(page: page)
+    }
+    
+    // ************************************************
+    // MARK: Genres
+    // ************************************************
+    
+    func genres() -> Single<[GenreResultAPI]> {
+        return TMDbAPI.Genres.getGenres()
     }
 }

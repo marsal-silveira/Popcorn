@@ -13,6 +13,7 @@
 "error.network" = "Could not connect with network, please try again";
 "error.timeout" = "The operation couldn't be completed dua to a timeout";
 "error.parsing.json" = "Could not parse data...";
+"error.unexpected.response" = "Server return an unexpected response";
 
 // Default
 "default.try.again" = "Try Again";

@@ -10,16 +10,25 @@ import Foundation
 
 class Movie {
     
-    private(set) var id: Int64
+    private(set) var id: Int
     private(set) var title: String
     private(set) var posterPath: String?
     private(set) var backdropPath: String?
     private(set) var releaseDate: String
     private(set) var overview: String
     private(set) var rating: Double
-//    private(set) var genres: [Genre]
+    private(set) var genres: [Genre]
     
-    init(id: Int64, title: String, posterPath: String?, backdropPath: String?, releaseDate: String, overview: String, rating: Double) {
+    // calculated
+    var genresStr: String {
+        var result = self.genres.reduce("", { (old, genre) -> String in
+            return old + genre.name + ", "
+        })
+        if result.contains(",") { result.removeLast(2) }
+        return result
+    }
+    
+    init(id: Int, title: String, posterPath: String?, backdropPath: String?, releaseDate: String, overview: String, rating: Double, genres: [Genre]) {
         
         self.id = id
         self.title = title
@@ -28,31 +37,38 @@ class Movie {
         self.releaseDate = releaseDate
         self.overview = overview
         self.rating = rating
+        self.genres = genres
     }
 }
 
+// Decoder...
 extension Movie {
 
-    static func map(movieResult: MovieResultAPI) -> Movie? {
+    static func map(movieResult: MovieResultAPI, genres: [Genre]) -> Movie? {
         
         guard let id = movieResult.id,
               let title = movieResult.title,
               let overview = movieResult.overview,
               let rating = movieResult.rating,
-              let releaseDate = movieResult.releaseDate else {
+              let releaseDate = movieResult.releaseDate,
+              let genresIds = movieResult.genres else {
             return nil
         }
         
         let posterPath = movieResult.posterPath
         let backdropPath = movieResult.backdropPath
+        
+        let genresResult = genres.filter { (genre) -> Bool in
+            return genresIds.contains(genre.id)
+        }
 
-        return Movie(id: id, title: title, posterPath: posterPath, backdropPath: backdropPath, releaseDate: releaseDate, overview: overview, rating: rating)
+        return Movie(id: id, title: title, posterPath: posterPath, backdropPath: backdropPath, releaseDate: releaseDate, overview: overview, rating: rating, genres: genresResult)
     }
     
-    static func mapArray(moviesResult: [MovieResultAPI]) -> [Movie] {
+    static func mapArray(moviesResult: [MovieResultAPI], genres: [Genre]) -> [Movie] {
         
         return moviesResult
-            .map { map(movieResult: $0) }
+            .map { map(movieResult: $0, genres: genres) }
             .filter { $0 != nil }
             .map { $0! }
     }

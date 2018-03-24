@@ -13,30 +13,69 @@ import RxCocoa
 protocol MovieRepositoryProtocol {
 
     var upcomingMovies: Observable<RequestResponse<UpcomingMovies>> { get }
-    func getUpcomingMovies(page: Int)
+    func fetchUpcomingMovies(page: Int)
 }
 
 class MovieRepository: BaseRepository {
 
     fileprivate let _TMDbAPI: TMDbAPIProtocol
-    fileprivate var _upcomingMovies = BehaviorRelay<RequestResponse<UpcomingMovies>>(value: .new)
+    fileprivate var _upcomingMoviesResponse = BehaviorRelay<RequestResponse<UpcomingMovies>>(value: .new)
+    
+    private let _genreRepository: GenreRepositoryProtocol
+    private var _genres: [Genre] = []
     
     fileprivate var _disposeBag = DisposeBag()
 
-    init(tMDbAPI: TMDbAPIProtocol) {
+    init(tMDbAPI: TMDbAPIProtocol, genreRepository: GenreRepositoryProtocol) {
         _TMDbAPI = tMDbAPI
+        _genreRepository = genreRepository
+        
+        super.init()
+        self.bind()
+    }
+    
+    private func bind() {
+     
+        _genreRepository
+            .genres
+            .bind {[weak self] (response) in
+                guard let strongSelf = self else { return }
+                
+                switch response {
+                    
+                case .loading:
+                    strongSelf._upcomingMoviesResponse.accept(.loading)
+                    
+                case .success(let genres):
+                    strongSelf._genres = genres
+                    strongSelf.fetchUpcomingMovies(page: 1)
+                    
+                case .failure(let error):
+                    strongSelf._upcomingMoviesResponse.accept(.failure(error))
+                    
+                default:
+                    break
+                }
+            }
+            .disposed(by: _disposeBag)
     }
 }
 
 extension MovieRepository: MovieRepositoryProtocol {
-    
+
     var upcomingMovies: Observable<RequestResponse<UpcomingMovies>> {
-        return _upcomingMovies.asObservable()
+        return _upcomingMoviesResponse.asObservable()
     }
 
-    func getUpcomingMovies(page: Int) {
+    func fetchUpcomingMovies(page: Int) {
         
-        _upcomingMovies.accept(.loading)
+        // if is first load... fetch genres before
+        if _genres.isEmpty {
+            _genreRepository.fetchGenres()
+            return
+        }
+
+        _upcomingMoviesResponse.accept(.loading)
         
         _TMDbAPI.upcomingMovies(page: page)
             .subscribe { [weak self] (event) in
@@ -44,11 +83,11 @@ extension MovieRepository: MovieRepositoryProtocol {
                 
                 switch event {
                 case .success(let upcomingMoviesResult):
-                    guard let upcomingMovies = UpcomingMovies.map(upcomingMoviesResult: upcomingMoviesResult) else { fatalError() }
-                    strongSelf._upcomingMovies.accept(.success(upcomingMovies))
+                    guard let upcomingMovies = UpcomingMovies.map(upcomingMoviesResult: upcomingMoviesResult, genres: strongSelf._genres) else { fatalError() }
+                    strongSelf._upcomingMoviesResponse.accept(.success(upcomingMovies))
                     
                 case .error(let error):
-                    strongSelf._upcomingMovies.accept(.failure(error))
+                    strongSelf._upcomingMoviesResponse.accept(.failure(error))
                 }
             }
             .disposed(by: _disposeBag)

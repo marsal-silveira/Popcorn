@@ -11,7 +11,7 @@ import ObjectMapper
 
 class MovieResultAPI: Mappable {
     
-    private(set) var id: Int64?
+    private(set) var id: Int?
     private(set) var title: String?
     private(set) var posterPath: String?
     private(set) var backdropPath: String?

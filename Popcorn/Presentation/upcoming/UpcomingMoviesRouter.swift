@@ -24,12 +24,15 @@ class UpcomingMoviesRouter: BaseRouter {
     }
     
     override init() {
+
+        let genreRepository = GenreRepository(tMDbAPI: TMDbAPI())
+        let movieRepository = MovieRepository(tMDbAPI: TMDbAPI(), genreRepository: genreRepository)
+        let interactor = UpcomingMoviesInteractor(repository: movieRepository)
         
-        let interactor = UpcomingMoviesInteractor(repository: MovieRepository(tMDbAPI: TMDbAPI()))
         _presenter = UpcomingMoviesPresenter(interactor: interactor)
         _viewController = UpcomingMoviesViewController(presenter: _presenter)
         _navigationController = BaseNavigationController(rootViewController: _viewController)
-        
+
         super.init()
         
         _presenter.router = self

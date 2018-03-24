@@ -28,8 +28,8 @@ class UpcomingMoviesInteractor: BaseInteractor {
     private var _currentPage: Int = 0
 
     init(repository: MovieRepositoryProtocol) {
-        
         _repository = repository
+        
         super.init()
         
         self.bind()
@@ -71,17 +71,17 @@ extension UpcomingMoviesInteractor: UpcomingMoviesInteractorProtocol {
     }
     
     func fetchMovies(reset: Bool) {
-
+        
         if reset {
             _movies.removeAll()
             _currentPage = 0
             _totalPages = 0
         }
-
+        
         // only continue if has pages to be fetched...
         let nextPage = _currentPage+1
         if (nextPage == 1) || (nextPage <= _totalPages) {
-            _repository.getUpcomingMovies(page: nextPage)
+            _repository.fetchUpcomingMovies(page: nextPage)
         }
     }
 }

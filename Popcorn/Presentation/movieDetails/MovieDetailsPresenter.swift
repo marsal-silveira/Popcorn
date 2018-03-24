@@ -60,7 +60,8 @@ extension MovieDetailsPresenter: MovieDetailsPresenterProtocol {
             .movie
             .flatMap { (movie) -> Observable<MovieDetailsVO> in
                 
-                let backdropPath = movie.backdropPath != nil ? "http://image.tmdb.org/t/p/w300\(movie.backdropPath!)" : nil
+                // TODO: Check this... call TMDbAPI from here looks like strange :|
+                let backdropPath = movie.backdropPath != nil ? "\(TMDbAPI.imageBasePath)/w780\(movie.backdropPath!)" : nil
                 let rating = "★ \(movie.rating)"
                 let releaseDate = movie.releaseDate
                 let genre = "<genre>"

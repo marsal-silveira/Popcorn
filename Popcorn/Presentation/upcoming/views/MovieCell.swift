@@ -16,7 +16,8 @@ class MovieCell: UICollectionViewCell {
     @IBOutlet fileprivate weak var containerView: UIView!
     @IBOutlet fileprivate weak var posterImageView: UIImageView!
     @IBOutlet fileprivate weak var titleLabel: UILabel!
-    @IBOutlet fileprivate weak var detailsLabel: UILabel!
+    @IBOutlet fileprivate weak var genresLabel: UILabel!
+    @IBOutlet fileprivate weak var releaseDateLabel: UILabel!
     @IBOutlet fileprivate weak var ratingLabel: UILabel!
     
     override func awakeFromNib() {
@@ -39,7 +40,8 @@ class MovieCell: UICollectionViewCell {
     func setup(movie: UpcomingMovieVO) {
 
         self.titleLabel.text = movie.title
-        self.detailsLabel.text = movie.details
+        self.genresLabel.text = movie.genres
+        self.releaseDateLabel.text = movie.releaseDate
         self.ratingLabel.text = movie.rating
         
         self.downloadPoster(movie: movie)
