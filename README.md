@@ -94,7 +94,7 @@ $ pod install
 Marsal Silveira, marsal.silveira@gmail.com
 
 ## Credits
-Popcorn is a challenge implementation propose by [ArcTouch](https://github.com/JohnSundell).
+Popcorn is a challenge implementation propose by [ArcTouch](https://arctouch.com).
 
 App icon by [matheusgrilo](https://matheusgrilo.deviantart.com/art/Movies-and-Popcorn-Folder-Icon-441651956).
 
