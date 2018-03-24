@@ -9,19 +9,6 @@
 import Foundation
 import ObjectMapper
 
-class GenresResultAPI: Mappable {
-    
-    private(set) var genres: [GenreResultAPI]?
-    
-    required init?(map: Map) {
-        mapping(map: map)
-    }
-    
-    func mapping(map: Map) {
-        genres <- map["genres"]
-    }
-}
-
 class GenreResultAPI: Mappable {
     
     private(set) var id: Int?

@@ -61,11 +61,10 @@ extension MovieDetailsPresenter: MovieDetailsPresenterProtocol {
             .flatMap { (movie) -> Observable<MovieDetailsVO> in
                 
                 // TODO: Check this... call TMDbAPI from here looks like strange :|
-                let backdropPath = movie.backdropPath != nil ? "\(TMDbAPI.imageBasePath)/w780\(movie.backdropPath!)" : nil
+                let backdropPath = movie.backdropPath != nil ? "\(TMDbAPI.backdropBasePath)\(movie.backdropPath!)" : nil
                 let rating = "★ \(movie.rating)"
                 let releaseDate = movie.releaseDate
-                let genre = "<genre>"
-                let movieDetails = MovieDetailsVO(backdropPath: backdropPath, title: movie.title, rating: rating, releaseDate: releaseDate, genre: genre, overview: movie.overview)
+                let movieDetails = MovieDetailsVO(backdropPath: backdropPath, title: movie.title, rating: rating, releaseDate: releaseDate, genre: movie.genresStr, overview: movie.overview)
                 return Observable.just(movieDetails)
             }
     }

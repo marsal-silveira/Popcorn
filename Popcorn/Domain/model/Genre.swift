@@ -19,6 +19,7 @@ class Genre {
     }
 }
 
+// Decoder...
 extension Genre {
     
     static func map(genreResult: GenreResultAPI) -> Genre? {

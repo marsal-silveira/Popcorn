@@ -10,6 +10,7 @@ import UIKit
 import Cartography
 import RxSwift
 import RxCocoa
+import ParallaxHeader
 
 class UpcomingMoviesViewController: BaseViewController {
     
@@ -61,16 +62,10 @@ class UpcomingMoviesViewController: BaseViewController {
         
         return collectionView
     }()
-
-    // ************************************************
-    // MARK: UIViewController Lifecycle
-    // ************************************************
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.setupOnLoad()
-    }
+    
+    private lazy var _header: UpcomingMoviesHeaderView = {
+        return UpcomingMoviesHeaderView.loadNibName()
+    }()
 
     // ************************************************
     // MARK: Setup
@@ -84,13 +79,11 @@ class UpcomingMoviesViewController: BaseViewController {
             .disposed(by: _disposeBag)
     }
     
-    private func setupOnLoad() {
-        
-        self.title = Strings.upcomingMoviesTitle()
-        
+    override func applyLayout() {
+        super.applyLayout()
+
         self.addBackgroundImage(#imageLiteral(resourceName: "bg_upcoming"))
         self.addCollectionView()
-        _collectionView.reloadData()
         self.loadData(reset: true)
     }
     
@@ -99,6 +92,14 @@ class UpcomingMoviesViewController: BaseViewController {
         constrain(view, _collectionView) { (container, collectionView) in
             collectionView.edges == container.edges
         }
+        self.addHeader()
+    }
+    
+    private func addHeader() {
+        _collectionView.parallaxHeader.view = _header
+        _collectionView.parallaxHeader.height = _header.bounds.size.height
+        _collectionView.parallaxHeader.mode = .bottomFill
+        _collectionView.contentInset.bottom = 8
     }
     
     //*************************************************
@@ -121,14 +122,7 @@ class UpcomingMoviesViewController: BaseViewController {
         
         _movies.removeAll()
         _movies.append(contentsOf: movies)
-        
-//        print("->> count \(_movies.count)")
-//        var count = 0
-//        _movies.forEach { (movie) in
-//            count += 1
-//            print("->> [\(count)] [\(movie.id)] \(movie.title)")
-//        }
-        
+
         DispatchQueue.main.async { [weak self] in
             self?._refreshControl.endRefreshing()
             self?._collectionView.reloadData()
@@ -148,7 +142,6 @@ extension UpcomingMoviesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-//        print("section -> \(indexPath.section), row -> \(indexPath.row)")
         let cell = collectionView.dequeueReusableCell(forIndexPath: indexPath) as MovieCell
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
@@ -181,7 +174,7 @@ extension UpcomingMoviesViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 
-//        print("row -> \(indexPath.row), count -> \(_movies.count)")
+        // we use this to get movies on demand... maybe has a better way to do this but for now it works :)
         if indexPath.row == _movies.count-1 {
             _presenter.fetchMovies(reset: false)
         }

@@ -9,6 +9,7 @@ target 'Popcorn' do
   
   #Layout
   pod 'Cartography'
+  pod 'ParallaxHeader'
   pod 'Kingfisher'
 
   #Lint
@@ -17,7 +18,6 @@ target 'Popcorn' do
   # Rx
   pod 'RxSwift'
   pod 'RxCocoa'
-  pod 'RxGesture'
 
   #API/Network
   pod 'Moya-ObjectMapper/RxSwift'
@@ -25,6 +25,7 @@ target 'Popcorn' do
   swift4 = [
     'R.swift',
     'Cartography',
+    'ParallaxHeader',
     'Kingfisher',
     'Rswift',
     'RxSwift',

@@ -18,6 +18,7 @@ class MovieDetailsViewController: BaseViewController {
     // MARK: @IBOutlets
     // ************************************************
     
+    @IBOutlet fileprivate weak var scrollView: UIScrollView!
     @IBOutlet fileprivate weak var loadignIndicator: UIActivityIndicatorView!
     @IBOutlet fileprivate weak var backdropImage: UIImageView!
     @IBOutlet fileprivate weak var titleLabel: UILabel!
@@ -65,16 +66,16 @@ class MovieDetailsViewController: BaseViewController {
             .disposed(by: _disposeBag)
     }
     
-    override func applyLayout() {
+    override internal func applyLayout() {
         super.applyLayout()
         
         self.title = Strings.movieDetailsTitle()
-        
+
         ratingLabel.text = Strings.movieDetailsRating()
         releaseDateLabel.text = Strings.movieDetailsReleaseDate()
         genreLabel.text = Strings.movieDetailsGenre()
     }
-
+    
     //*************************************************
     // MARK: - Data
     //*************************************************

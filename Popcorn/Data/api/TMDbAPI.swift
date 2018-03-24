@@ -27,10 +27,15 @@ struct TMDbAPI {
         static let long: Double = 120
     }
     
+    // API constants
     static let apiKey = "1f54bd990f1cdfb230adb312546d765d"
     static let apiVersion: String = "/3"
     static let apiBasePath: String = "https://api.themoviedb.org" + apiVersion
-    static let imageBasePath: String = "https://image.tmdb.org/t/p"
+    
+    // Images constants (poster and backdrop paths)
+    private static let imageBasePath: String = "https://image.tmdb.org/t/p"
+    static let posterBasePath: String = imageBasePath + "/w300"
+    static let backdropBasePath: String = imageBasePath + "/w780"
 }
 
 extension TMDbAPI: TMDbAPIProtocol {

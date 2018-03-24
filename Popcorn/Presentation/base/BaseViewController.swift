@@ -43,14 +43,6 @@ class BaseViewController: UIViewController {
 
         self.setupOnLoad()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if let navigationController = self.navigationController as? BaseNavigationController {
-            navigationController.style = .transparent
-        }
-    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -64,7 +56,7 @@ class BaseViewController: UIViewController {
     // MARK: Setup
     // ************************************************
     
-    private func setupOnLoad() {
+    internal func setupOnLoad() {
         self.removeBackButtonTitle()
         self.applyLayout()
         self.bind()
@@ -109,7 +101,7 @@ class BaseViewController: UIViewController {
 
 extension BaseViewController {
 
-    internal func addBackgroundImage(_ image: UIImage, withBlurEffect: Bool = false) {
+    internal func addBackgroundImage(_ image: UIImage) {
 
         _backgroundImageView?.removeFromSuperview()
         _backgroundImageView = UIImageView(image: image)
@@ -118,14 +110,6 @@ extension BaseViewController {
         self.view.sendSubview(toBack: _backgroundImageView!)
         constrain(self.view, _backgroundImageView!) { (container, image) in
             image.edges == container.edges
-        }
-
-        if withBlurEffect {
-            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark) //extraLight, light, dark
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.frame = _backgroundImageView!.bounds
-            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            _backgroundImageView!.addSubview(blurEffectView)
         }
     }
 }

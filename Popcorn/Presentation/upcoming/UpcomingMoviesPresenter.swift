@@ -100,7 +100,7 @@ extension UpcomingMoviesPresenter: UpcomingMoviesPresenterProtocol {
                 let mm = movies.map { (movie) -> UpcomingMovieVO in
                     
                     // TODO: Check this... call TMDbAPI from here looks like strange :|
-                    let posterPath = movie.posterPath != nil ? "\(TMDbAPI.imageBasePath)/w300\(movie.posterPath!)" : nil
+                    let posterPath = movie.posterPath != nil ? "\(TMDbAPI.posterBasePath)\(movie.posterPath!)" : nil
                     let rating = "★ \(movie.rating)"
                     return UpcomingMovieVO(id: movie.id, posterPath: posterPath, title: movie.title, genres: movie.genresStr, releaseDate: movie.releaseDate, rating: rating)
                 }
