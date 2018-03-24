@@ -99,4 +99,4 @@ Popcorn is a challenge implementation propose by [ArcTouch](https://github.com/J
 App icon by [matheusgrilo](https://matheusgrilo.deviantart.com/art/Movies-and-Popcorn-Folder-Icon-441651956).
 
 ## License
-Popcorn is released under an MIT license. See [License.md](LICENSE) for more information.
+Popcorn is released under an MIT license. See [License](LICENSE) for more information.
