@@ -6,10 +6,13 @@ App to get upcoming movies using `The Movie Database (TMDb)` as reference.
 <table>
   <tr>
     <th>
-      <img src="Screenshots/Popcorn_upcoming.png" width="220"/>
+      <img src="Screenshots/Popcorn_#1.png" width="220"/>
     </th>
     <th>
-      <img src="Screenshots/Popcorn_details.png" width="220"/>
+      <img src="Screenshots/Popcorn_#2.png" width="220"/>
+    </th>
+    <th>
+      <img src="Screenshots/Popcorn_#3.png" width="220"/>
     </th>
   </tr>
 </table>

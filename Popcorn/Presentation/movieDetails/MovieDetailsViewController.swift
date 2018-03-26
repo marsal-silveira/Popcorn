@@ -6,6 +6,7 @@
 //  Copyright © 2018 Marsal Silveira. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import Cartography
 import RxSwift
@@ -19,8 +20,6 @@ class MovieDetailsViewController: BaseViewController {
     // ************************************************
     
     @IBOutlet fileprivate weak var scrollView: UIScrollView!
-    @IBOutlet fileprivate weak var loadignIndicator: UIActivityIndicatorView!
-    @IBOutlet fileprivate weak var backdropImage: UIImageView!
     @IBOutlet fileprivate weak var titleLabel: UILabel!
     @IBOutlet fileprivate weak var ratingLabel: UILabel!
     @IBOutlet fileprivate weak var ratingValueLabel: UILabel!
@@ -39,6 +38,14 @@ class MovieDetailsViewController: BaseViewController {
     }
 
     fileprivate var _disposeBag = DisposeBag()
+    
+    // ************************************************
+    // MARK: UI Components
+    // ************************************************
+    
+    private lazy var _header: MovieDetailsHeaderView = {
+        return MovieDetailsHeaderView()
+    }()
 
     // ************************************************
     // MARK: UIViewController Init | Lifecycle
@@ -68,14 +75,20 @@ class MovieDetailsViewController: BaseViewController {
     
     override internal func applyLayout() {
         super.applyLayout()
-        
-        self.title = Strings.movieDetailsTitle()
 
+        self.addHeader()
         ratingLabel.text = Strings.movieDetailsRating()
         releaseDateLabel.text = Strings.movieDetailsReleaseDate()
         genreLabel.text = Strings.movieDetailsGenre()
     }
     
+    private func addHeader() {
+        scrollView.parallaxHeader.view = _header
+        scrollView.parallaxHeader.height = 230
+        scrollView.parallaxHeader.minimumHeight = 0
+        scrollView.parallaxHeader.mode = .centerFill
+    }
+
     //*************************************************
     // MARK: - Data
     //*************************************************
@@ -88,24 +101,6 @@ class MovieDetailsViewController: BaseViewController {
         genreValueLabel.text = movie.genre
         overviewLabel.text = movie.overview
         
-        self.downloadBackdrop(movie: movie)
-    }
-    
-    private func updateBackdropImage(_ image: UIImage) {
-        
-        self.loadignIndicator.stopAnimating()
-        self.loadignIndicator.isHidden = true
-        self.backdropImage.image = image
-    }
-    
-    private func downloadBackdrop(movie: MovieDetailsVO) {
-        
-        if let picturePath = movie.backdropPath, let pictureURL = URL(string: picturePath) {
-            ImageDownloader.default.downloadImage(with: pictureURL, completionHandler: { [weak self] (image, error, _, _) in
-                self?.updateBackdropImage(image ?? #imageLiteral(resourceName: "img_placeholder"))
-            })
-        } else {
-            self.updateBackdropImage(#imageLiteral(resourceName: "img_placeholder"))
-        }
+        _header.loadMovieBackdrop(movie.backdropPath)
     }
 }
