@@ -33,8 +33,8 @@ extension TMDbAPI {
                 .flatMap({ response -> Single<[GenreResultAPI]> in
 
                     // conver JSON to Genres array... we need do this manually because result (json) came enveloped into `genres`
-                    guard let json = try response.mapJSON() as? [String : Any],
-                          let genresJSON = json["genres"] as? [[String : Any]] else {
+                    guard let json = try response.mapJSON() as? JSON,
+                          let genresJSON = json["genres"] as? [JSON] else {
                         throw MoyaError.jsonMapping(response)
                     }
                     let genres = Mapper<GenreResultAPI>(context: nil).mapArray(JSONArray: genresJSON)

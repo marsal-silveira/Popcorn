@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Genre {
+struct Genre {
     
     private(set) var id: Int
     private(set) var name: String

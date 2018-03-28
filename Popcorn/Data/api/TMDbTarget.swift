@@ -57,7 +57,7 @@ extension TMDbTarget {
         ]
     }
     
-    var parameters: [String: Any]? {
+    var parameters: JSON? {
         return nil
     }
     

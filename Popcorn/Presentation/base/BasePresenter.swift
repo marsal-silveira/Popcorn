@@ -23,7 +23,7 @@ protocol BasePresenterProtocol {
     var viewState: Observable<ViewState> { get }
 }
 
-class BasePresenter: NSObject {
+class BasePresenter {
     
     internal let _viewState = BehaviorRelay<ViewState>(value: .normal)
 

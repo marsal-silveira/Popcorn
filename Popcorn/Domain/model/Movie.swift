@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Movie {
+struct Movie {
     
     private(set) var id: Int
     private(set) var title: String

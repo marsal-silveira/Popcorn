@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 // Store the error message and http status code returned from WebService when occurs error
-class ErrorResultAPI: Mappable {
+struct ErrorResultAPI: Mappable {
     
     var status: Int?
     var message: String?
@@ -19,11 +19,11 @@ class ErrorResultAPI: Mappable {
         return message ?? Strings.errorDefault()
     }
     
-    required init?(map: Map) {
+    init?(map: Map) {
         mapping(map: map)
     }
     
-    func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         status <- map["status_code"]
         message <- map ["status_message"]
     }

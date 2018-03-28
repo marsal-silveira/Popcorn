@@ -47,9 +47,9 @@ enum ClientUtils {
 
 extension Data {
     
-    var asJSON: Result<[String: Any], NSError> {
+    var asJSON: Result<JSON, NSError> {
         do {
-            guard let JSONDict = try JSONSerialization.jsonObject(with: self, options: []) as? [String: Any] else {
+            guard let JSONDict = try JSONSerialization.jsonObject(with: self, options: []) as? JSON else {
                 return Result.failure(PopcornError.parsingJSON as NSError)
             }
             return Result.success(JSONDict)
@@ -67,7 +67,7 @@ extension PrimitiveSequence where TraitType == SingleTrait, ElementType == Respo
             
             // process response code
             switch response.statusCode {
-            case 200..<299:
+            case 200...299:
                 return Single.just(response)
             default:
                 
